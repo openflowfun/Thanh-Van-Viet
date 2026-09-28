@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { PRODUCTS, categoryFromSlug } from "@/lib/products";
 import { SITE } from "@/lib/format";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = ["", "/shop", "/lookbook", "/about", "/contact", "/size-guide", "/shipping-returns"];
   return [

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ShopGrid } from "@/components/shop/ShopGrid";
-import { CATEGORIES, OCCASIONS, PRODUCTS, type Category, type Occasion } from "@/lib/products";
+import { PRODUCTS } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Shop All",
@@ -9,11 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/shop" },
 };
 
-export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
-  const sp = await searchParams;
-  const cat = typeof sp.category === "string" && CATEGORIES.some((c) => c.key === sp.category) ? (sp.category as Category) : null;
-  const occ = typeof sp.occasion === "string" && OCCASIONS.includes(sp.occasion as Occasion) ? (sp.occasion as Occasion) : null;
-
+export default function ShopPage() {
   return (
     <>
       <PageHeader
@@ -22,7 +18,7 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
         kicker="Áo dài for women and children, family sets, and the small silk things that finish a look. Every piece is sized in centimetres."
         crumbs={[{ href: "/shop", label: "Shop" }]}
       />
-      <ShopGrid products={PRODUCTS} initialCategory={cat} initialOccasion={occ} />
+      <ShopGrid products={PRODUCTS} readQuery />
     </>
   );
 }

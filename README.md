@@ -18,6 +18,16 @@ npm run lint
 
 Node 20+ is recommended.
 
+### The HTML version
+
+The site is set up as a **static HTML export** (`output: "export"` in `next.config.ts`).
+`npm run build` writes the whole website to **`out/`** as plain `.html`, `.css` and `.js` files. Every page is pre-rendered, including all 36 product pages. No Node.js server is needed to host it.
+
+- **Upload:** copy the *contents* of `out/` to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pages with a custom domain, or cPanel `public_html`).
+- **Preview locally:** `npm run preview`, then open http://localhost:3000.
+  Double-clicking `index.html` won't work properly, because pages load their assets from the site root (`/_next/…`) and need to be served over HTTP.
+- `website-html/` in the delivered folder is a ready-built copy of `out/`.
+
 ## Pages
 
 | Route | What it is |

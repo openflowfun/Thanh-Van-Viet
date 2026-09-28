@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "./ProductCard";
 import { CATEGORIES, OCCASIONS, PRICE_BANDS, type Category, type Occasion, type Product } from "@/lib/products";
 
@@ -23,15 +23,28 @@ type Props = {
   initialOccasion?: Occasion | null;
   /** Hide the category filter on collection pages. */
   lockCategory?: boolean;
+  /** Read ?category= and ?occasion= from the URL in the browser (static-export friendly). */
+  readQuery?: boolean;
 };
 
-export function ShopGrid({ products, initialCategory = null, initialOccasion = null, lockCategory = false }: Props) {
+export function ShopGrid({ products, initialCategory = null, initialOccasion = null, lockCategory = false, readQuery = false }: Props) {
   const [category, setCategory] = useState<Category | null>(initialCategory);
   const [occasions, setOccasions] = useState<Occasion[]>(initialOccasion ? [initialOccasion] : []);
   const [colours, setColours] = useState<string[]>([]);
   const [price, setPrice] = useState<string | null>(null);
   const [sort, setSort] = useState<Sort>("featured");
   const [panelOpen, setPanelOpen] = useState(false);
+
+  useEffect(() => {
+    if (!readQuery) return;
+    const q = new URLSearchParams(window.location.search);
+    const c = q.get("category");
+    const o = q.get("occasion");
+    /* eslint-disable react-hooks/set-state-in-effect */
+    if (c && CATEGORIES.some((x) => x.key === c)) setCategory(c as Category);
+    if (o && OCCASIONS.includes(o as Occasion)) setOccasions([o as Occasion]);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [readQuery]);
 
   const availableOccasions = useMemo(() => OCCASIONS.filter((o) => products.some((p) => p.occasions.includes(o))), [products]);
   const availableColours = useMemo(

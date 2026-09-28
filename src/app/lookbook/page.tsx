@@ -19,7 +19,7 @@ const CHAPTERS: { n: string; title: string; line: string; href: string; frames: 
     n: "I",
     title: "Tết",
     line: "Peach blossom, red envelopes and the first morning of the year.",
-    href: "/shop?occasion=T%E1%BA%BFt",
+    href: "/shop/?occasion=T%E1%BA%BFt",
     frames: [
       { src: IMG.redPeachBlossom, alt: "A woman in a red áo dài among peach blossom", span: "col-span-12 lg:col-span-5", aspect: "aspect-[3/4]", speed: 10 },
       { src: IMG.redBlossomSmile, alt: "Smiling in red silk among blossom", span: "col-span-7 lg:col-span-4 lg:mt-40", aspect: "aspect-[4/5]", speed: -8 },
