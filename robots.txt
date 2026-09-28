@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /cart
+
+Sitemap: https://thanhvanviet.com.au/sitemap.xml
