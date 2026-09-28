@@ -4,6 +4,7 @@ import { LotusDivider } from "@/components/ui/Lotus";
 import { Newsletter } from "@/components/ui/Newsletter";
 import { PRIMARY_NAV, SECONDARY_NAV, SERVICE_NAV } from "./nav-links";
 import { SITE } from "@/lib/format";
+import { asset } from "@/lib/asset";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -12,7 +13,7 @@ export function Footer() {
       <div className="container-x pb-10 pt-20 lg:pt-28">
         <div className="flex flex-col items-center text-center">
           <Image
-            src="/brand/logo-full-ivory.png"
+            src={asset("/brand/logo-full-ivory.png")}
             alt="Thanh Van Viet — Vietnamese Fashion & Lifestyle"
             width={1128}
             height={929}

@@ -9,6 +9,7 @@ import { useLenis } from "@/components/motion/SmoothScroll";
 import { gsap, motionOK } from "@/lib/gsap";
 import { DARK_HERO_ROUTES, PRIMARY_NAV, SECONDARY_NAV, SERVICE_NAV } from "./nav-links";
 import { SITE } from "@/lib/format";
+import { asset } from "@/lib/asset";
 
 function BagIcon() {
   return (
@@ -20,7 +21,9 @@ function BagIcon() {
 }
 
 export function Nav() {
-  const pathname = usePathname();
+  const rawPath = usePathname();
+  // trailingSlash: true → "/about/"; normalise for route matching.
+  const pathname = rawPath.length > 1 ? rawPath.replace(/\/+$/, "") : rawPath;
   const { count, openCart, ready } = useStore();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -91,7 +94,7 @@ export function Nav() {
           {/* Centre — wordmark */}
           <TLink href="/" aria-label="Thanh Van Viet — home" className="relative block shrink-0">
             <Image
-              src="/brand/wordmark-ivory.png"
+              src={asset("/brand/wordmark-ivory.png")}
               alt=""
               width={1128}
               height={153}
@@ -100,7 +103,7 @@ export function Nav() {
               className={`h-auto w-[150px] transition-opacity duration-700 sm:w-[190px] lg:w-[210px] ${transparent ? "opacity-100" : "opacity-0"}`}
             />
             <Image
-              src="/brand/wordmark-red.png"
+              src={asset("/brand/wordmark-red.png")}
               alt=""
               width={1128}
               height={153}
@@ -184,7 +187,7 @@ function MobileMenu({ open, onClose, isActive }: { open: boolean; onClose: () =>
       }`}
     >
       <Image
-        src="/brand/mark-red.png"
+        src={asset("/brand/mark-red.png")}
         alt=""
         width={537}
         height={630}

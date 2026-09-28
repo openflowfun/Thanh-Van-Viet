@@ -10,6 +10,7 @@ import { Nav } from "@/components/layout/Nav";
 import { CartDrawer } from "@/components/layout/CartDrawer";
 import { Footer } from "@/components/layout/Footer";
 import { SITE } from "@/lib/format";
+import { asset } from "@/lib/asset";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     siteName: SITE.wordmark,
     title: `${SITE.wordmark} — ${SITE.hero}`,
     description: "Authentic Vietnamese fashion, thoughtfully selected for Australia.",
-    images: [{ url: "/brand/og.jpg", width: 1200, height: 630, alt: "Thanh Van Viet" }],
+    images: [{ url: asset("/brand/og.jpg"), width: 1200, height: 630, alt: "Thanh Van Viet" }],
   },
   twitter: { card: "summary_large_image" },
 };

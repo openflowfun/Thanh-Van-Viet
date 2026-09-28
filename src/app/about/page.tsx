@@ -6,6 +6,7 @@ import { Parallax } from "@/components/motion/Parallax";
 import { LotusDivider } from "@/components/ui/Lotus";
 import { TLink } from "@/components/motion/PageTransition";
 import { Marquee } from "@/components/ui/Marquee";
+import { asset } from "@/lib/asset";
 
 export const metadata: Metadata = {
   title: "About",
@@ -105,7 +106,7 @@ export default function AboutPage() {
       <section aria-labelledby="our-family" className="container-x pb-24 lg:pb-36">
         <div data-reveal className="relative grid overflow-hidden border border-line bg-ivory lg:grid-cols-12">
           <div className="relative flex min-h-[280px] items-center justify-center bg-rice lg:col-span-5">
-            <Image src="/brand/mark-red.png" alt="" width={537} height={630} unoptimized className="w-28 opacity-25" />
+            <Image src={asset("/brand/mark-red.png")} alt="" width={537} height={630} unoptimized className="w-28 opacity-25" />
           </div>
           <div className="p-8 sm:p-12 lg:col-span-7 lg:p-16">
             <p className="eyebrow text-crimson">Our family</p>

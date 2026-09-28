@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 import { LOTUS_PATHS } from "@/components/ui/Lotus";
 import { useLenis } from "@/components/motion/SmoothScroll";
+import { asset } from "@/lib/asset";
 
 const KEY = "tvv.intro.v1";
 
@@ -85,7 +86,7 @@ export function Preloader() {
         ))}
       </svg>
       <div data-pre-word className="translate-y-2 opacity-0">
-        <Image src="/brand/wordmark-ivory.png" alt="" width={1128} height={153} priority unoptimized className="h-auto w-56 sm:w-72" />
+        <Image src={asset("/brand/wordmark-ivory.png")} alt="" width={1128} height={153} priority unoptimized className="h-auto w-56 sm:w-72" />
       </div>
     </div>
   );

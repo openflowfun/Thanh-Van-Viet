@@ -42,3 +42,5 @@ next-env.d.ts
 
 # ready-built HTML copy delivered alongside the source
 /website-html/
+.DS_Store
+*.zip

@@ -28,6 +28,19 @@ The site is set up as a **static HTML export** (`output: "export"` in `next.conf
   Double-clicking `index.html` won't work properly, because pages load their assets from the site root (`/_next/…`) and need to be served over HTTP.
 - `website-html/` in the delivered folder is a ready-built copy of `out/`.
 
+### GitHub Pages preview
+
+The live preview is at **https://openflowfun.github.io/Thanh-Van-Viet/**. It's served from the `gh-pages` branch, which contains only the built HTML. `main` holds the source.
+
+To rebuild it:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/Thanh-Van-Viet npm run build   # site lives in a sub-folder on Pages
+touch out/.nojekyll                                    # let Pages serve the _next folder
+```
+
+Then commit the contents of `out/` to the `gh-pages` branch. For a normal domain, build without `NEXT_PUBLIC_BASE_PATH`.
+
 ## Pages
 
 | Route | What it is |

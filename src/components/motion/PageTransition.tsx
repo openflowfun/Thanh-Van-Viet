@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createContext, forwardRef, useCallback, useContext, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { gsap, motionOK } from "@/lib/gsap";
+import { asset, BASE_PATH } from "@/lib/asset";
 
 type Nav = (href: string) => void;
 const TransitionContext = createContext<Nav | null>(null);
@@ -22,8 +23,8 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
 
   const navigate = useCallback<Nav>(
     (href) => {
-      const target = new URL(href, window.location.href);
-      if (target.pathname === window.location.pathname || !motionOK() || !overlay.current) {
+      const norm = (p: string) => (p.startsWith(BASE_PATH) ? p.slice(BASE_PATH.length) : p).replace(/\/+$/, "") || "/";
+      if (norm(new URL(href, window.location.origin).pathname) === norm(window.location.pathname) || !motionOK() || !overlay.current) {
         router.push(href);
         return;
       }
@@ -33,7 +34,16 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
         .timeline()
         .set(overlay.current, { display: "flex", transformOrigin: "50% 100%", scaleY: 0 })
         .to(overlay.current, { scaleY: 1, duration: 0.4, ease: "power2.inOut" })
-        .add(() => router.push(href));
+        .add(() => {
+          router.push(href);
+          // Safety: never leave the curtain down if the route didn't change.
+          window.setTimeout(() => {
+            if (covering.current && overlay.current) {
+              covering.current = false;
+              gsap.to(overlay.current, { scaleY: 0, transformOrigin: "50% 0%", duration: 0.45, ease: "power2.inOut", onComplete: () => void gsap.set(overlay.current, { display: "none" }) });
+            }
+          }, 2500);
+        });
     },
     [router],
   );
@@ -57,7 +67,7 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
         className="pointer-events-none fixed inset-0 z-[90] hidden items-center justify-center bg-crimson"
         style={{ transform: "scaleY(0)" }}
       >
-        <Image src="/brand/mark-ivory.png" alt="" width={56} height={66} className="opacity-80" unoptimized />
+        <Image src={asset("/brand/mark-ivory.png")} alt="" width={56} height={66} className="opacity-80" unoptimized />
       </div>
     </TransitionContext.Provider>
   );

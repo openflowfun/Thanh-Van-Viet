@@ -8,6 +8,7 @@ import { ProductCard } from "@/components/shop/ProductCard";
 import { CATEGORIES, THIS_SEASON, byCategory, getProduct } from "@/lib/products";
 import { IMG } from "@/lib/images";
 import { formatAUD } from "@/lib/format";
+import { asset } from "@/lib/asset";
 
 export function SectionHead({
   eyebrow,
@@ -223,7 +224,7 @@ export function LookbookStrip() {
 export function SoftCTA() {
   return (
     <section className="on-dark relative overflow-hidden bg-crimson text-ivory">
-      <Image src="/brand/mark-ivory.png" alt="" width={537} height={630} unoptimized className="pointer-events-none absolute -right-20 top-1/2 w-[520px] max-w-[80vw] -translate-y-1/2 opacity-[0.07]" />
+      <Image src={asset("/brand/mark-ivory.png")} alt="" width={537} height={630} unoptimized className="pointer-events-none absolute -right-20 top-1/2 w-[520px] max-w-[80vw] -translate-y-1/2 opacity-[0.07]" />
       <div className="container-x relative grid gap-12 py-24 lg:grid-cols-2 lg:items-end lg:py-32">
         <div>
           <p data-reveal className="eyebrow text-ivory/70">

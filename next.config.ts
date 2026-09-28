@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   // plain .html/.css/.js files that any static host can serve.
   output: "export",
   trailingSlash: true,
+  // Sub-folder hosting (GitHub Pages preview): NEXT_PUBLIC_BASE_PATH=/Thanh-Van-Viet
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || undefined,
   images: {
     // Product & editorial photography is served from Unsplash's image CDN
     // (imgix) with on-the-fly resizing. Swap this loader when real product
