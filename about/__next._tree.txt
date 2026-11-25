@@ -1,4 +1,4 @@
-:HL["/Thanh-Van-Viet/_next/static/chunks/3hb7ekkbajk2f.css","style"]
+:HL["/Thanh-Van-Viet/_next/static/chunks/1c86lk1m4wfo1.css","style"]
 :HL["/Thanh-Van-Viet/_next/static/media/14e23f9b59180572-s.p.0t8ljjjn9wtsx.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Thanh-Van-Viet/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Thanh-Van-Viet/_next/static/media/391e53907fa6d8ec-s.p.0vmd737txk1h4.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
@@ -11,4 +11,4 @@
 :HL["/Thanh-Van-Viet/_next/static/media/9d978ba009f47915-s.p.1x4h7xumh6h0q.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Thanh-Van-Viet/_next/static/media/a3bcb02a0e9e5d11-s.p.25pbmqxk8u2s7.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Thanh-Van-Viet/_next/static/media/a4f4f75ad654963f-s.p.1hvvd1t-trplq.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":4112,"slots":{"children":{"name":"about","param":null,"prefetchHints":4160,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"D_-0jts3Lfp6asW0sF_A2"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4112,"slots":{"children":{"name":"about","param":null,"prefetchHints":4160,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"t3WLGjFk7UGhqkGZwU0aX"}

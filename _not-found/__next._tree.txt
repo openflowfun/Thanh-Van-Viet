@@ -1,2 +1,2 @@
-:HL["/Thanh-Van-Viet/_next/static/chunks/3hb7ekkbajk2f.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4112,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4160,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"D_-0jts3Lfp6asW0sF_A2"}
+:HL["/Thanh-Van-Viet/_next/static/chunks/1c86lk1m4wfo1.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4112,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4160,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"t3WLGjFk7UGhqkGZwU0aX"}
