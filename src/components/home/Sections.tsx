@@ -46,10 +46,10 @@ export function SectionHead({
 }
 
 const TILE_IMAGES = {
-  womens: IMG.whiteSteps,
+  womens: "/products/anh-kim-metallic-lace-ao-dai/01.webp",
   kids: IMG.girlRedLake,
   family: IMG.familySeatedTall,
-  accessories: IMG.pearlStrand,
+  accessories: "/products/sunbathing-cat-tapestry-tote/01.webp",
 } as const;
 
 export function CollectionTiles() {
@@ -58,7 +58,7 @@ export function CollectionTiles() {
       <SectionHead
         eyebrow="The collections"
         title="Four rooms of the house"
-        kicker="From the first áo dài of a four-year-old to the wedding red of the tea ceremony — each collection is chosen for a moment in family life."
+        kicker="Ten áo dài and eight bags are live now, photographed as they really are. Kids’ áo dài and family sets are being chosen for the next season."
       />
       <div className="mt-14 grid grid-cols-2 gap-3 sm:gap-5 lg:mt-20 lg:grid-cols-12 lg:gap-6">
         {CATEGORIES.map((c, i) => {
@@ -81,7 +81,7 @@ export function CollectionTiles() {
                 <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 text-ivory sm:p-7">
                   <div>
                     <p className="text-[0.6rem] uppercase tracking-[0.3em] text-ivory/70">
-                      {String(i + 1).padStart(2, "0")} · {count} pieces
+                      {String(i + 1).padStart(2, "0")} · {count ? `${count} pieces · live on eBay` : "Arriving soon"}
                     </p>
                     <h3 className="display mt-2 text-[1.45rem] leading-tight sm:text-4xl">{c.label}</h3>
                     <p className="mt-2 hidden max-w-xs text-sm text-ivory/80 sm:block">{c.blurb}</p>
@@ -103,7 +103,7 @@ export function ThisSeason() {
   return (
     <section className="border-t border-line bg-rice/50 py-24 lg:py-36">
       <div className="container-x">
-        <SectionHead eyebrow="This season" title="Chosen for spring and Tết" action={{ href: "/shop", label: "Shop everything" }} />
+        <SectionHead eyebrow="Live on eBay" title="Chosen for spring and Tết" action={{ href: "/ebay", label: "All 28 listings" }} />
         <div className="mt-14 grid grid-cols-2 gap-x-3 gap-y-12 sm:gap-x-5 lg:mt-20 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-16">
           {THIS_SEASON.map((p, i) => (
             <div key={p.slug} data-reveal data-reveal-delay={(i % 4) * 0.06}>
@@ -116,41 +116,53 @@ export function ThisSeason() {
   );
 }
 
+/** Real photography from the listings: three friends in ivory, blush and silver-blue brocade. */
 export function FamilyFeature() {
-  const set = getProduct("tet-crimson-family-set")!;
+  const trio = ["ngoc-trai-ivory-pearl-brocade-ao-dai", "hong-ngoc-blush-pearl-brocade-ao-dai", "bang-lam-ice-blue-pearl-brocade-ao-dai"].map((s) => getProduct(s)!);
+  const truc = getProduct("truc-bamboo-brocade-ao-dai-tu-than")!;
   return (
     <section className="container-x grid items-center gap-12 py-24 lg:grid-cols-12 lg:gap-8 lg:py-40">
       <div className="relative lg:col-span-7">
         <div data-reveal className="relative aspect-[4/5] w-[82%] overflow-hidden bg-rice">
           <Parallax speed={12} scale={[1.15, 1.15]} className="absolute inset-0">
-            <Image src={IMG.redFlowerMarket} alt="A mother in a red Tết áo dài among blossom at the flower market" fill sizes="(min-width:1024px) 45vw, 80vw" className="object-cover" />
+            <Image src="/products/truc-bamboo-brocade-ao-dai-tu-than/03.webp" alt="Three friends in ivory, blush and silver-blue brocade áo dài beside a cyclo" fill sizes="(min-width:1024px) 45vw, 80vw" className="object-cover" />
           </Parallax>
         </div>
         <div data-reveal data-reveal-delay="0.15" className="absolute -bottom-10 right-0 aspect-[3/4] w-[44%] overflow-hidden border-[6px] border-ivory bg-rice shadow-xl sm:-bottom-14">
           <Parallax speed={-14} scale={[1.15, 1.15]} className="absolute inset-0">
-            <Image src={IMG.girlRedLake} alt="A little girl in a red áo dài looking out over the lake" fill sizes="(min-width:1024px) 25vw, 45vw" className="object-cover" />
+            <Image src="/products/truc-bamboo-brocade-ao-dai-tu-than/04.webp" alt="The three friends laughing together at a magazine kiosk" fill sizes="(min-width:1024px) 25vw, 45vw" className="object-cover" />
           </Parallax>
         </div>
       </div>
       <div className="mt-10 lg:col-span-5 lg:mt-0 lg:pl-10">
         <p data-reveal className="eyebrow text-crimson">
-          Mẹ và con · Mother &amp; daughter
+          Chị em · Sisters &amp; best friends
         </p>
-        <SplitHeading text="The same red, one size smaller" className="display mt-4 text-[clamp(2.3rem,4.6vw,4rem)] leading-[1.02]" />
+        <SplitHeading text="Ivory, blush and ice blue" className="display mt-4 text-[clamp(2.3rem,4.6vw,4rem)] leading-[1.02]" />
         <p data-reveal className="mt-6 max-w-md leading-relaxed text-stone">
-          Our Tết Crimson Family Set is cut from one bolt of cloth for a mother and a daughter — crisp taffeta for her, a soft-lined satin for the little one, and two matching khăn vấn. Choose each size separately.
+          Three brocades with a ring of pearls at the neck, cut alike so they belong together in a photograph — for sisters, bridesmaids or the friends you visit with at Tết. Each colour and size is its own live listing.
         </p>
-        <div data-reveal className="mt-8 flex items-baseline gap-4">
-          <span className="display text-3xl">{formatAUD(set.price)}</span>
-          {set.compareAt && <span className="text-sm text-stone line-through">{formatAUD(set.compareAt)}</span>}
-          <span className="text-xs uppercase tracking-[0.2em] text-stone">for the set</span>
-        </div>
+        <ul data-reveal className="mt-8 divide-y divide-line border-y border-line">
+          {trio.map((p) => (
+            <li key={p.slug}>
+              <TLink href={`/product/${p.slug}`} className="group flex items-center justify-between gap-4 py-4">
+                <span className="flex items-center gap-4">
+                  <span className="h-6 w-6 rounded-full ring-1 ring-ink/15" style={{ background: p.colours[0].hex }} />
+                  <span className="display text-xl group-hover:text-crimson">{p.colours[0].name}</span>
+                </span>
+                <span className="text-sm text-stone">
+                  {p.sizes.join(" · ")} — {formatAUD(p.price)}
+                </span>
+              </TLink>
+            </li>
+          ))}
+        </ul>
         <div data-reveal className="mt-8 flex flex-wrap gap-4">
-          <TLink href={`/product/${set.slug}`} className="btn-primary">
-            Shop the set
+          <TLink href={`/product/${truc.slug}`} className="btn-primary">
+            Shop the silver-blue tứ thân
           </TLink>
-          <TLink href="/collections/family-sets" className="btn-outline">
-            All family sets
+          <TLink href="/ebay" className="btn-outline">
+            All 28 listings
           </TLink>
         </div>
       </div>

@@ -7,6 +7,8 @@ import { useStore } from "@/lib/store";
 import { formatAUD, SITE } from "@/lib/format";
 import { chartsFor, HOW_TO_MEASURE } from "@/lib/size-charts";
 import type { Product } from "@/lib/products";
+import { fitClass } from "@/lib/media";
+import { EBAY_STORE } from "@/lib/catalog-data";
 import { SizeChartTable } from "@/components/shop/SizeChartTable";
 import { HeartIcon } from "@/components/shop/ProductCard";
 import { TLink } from "@/components/motion/PageTransition";
@@ -22,6 +24,8 @@ export function ProductDetail({ product: p }: { product: Product }) {
   const root = useRef<HTMLDivElement>(null);
   const wished = wishlist.includes(p.slug);
   const charts = chartsFor(p.sizeChartKey);
+  const listingFor = (sz: string | null) => (sz ? p.listings.find((l) => (l.size || "One size") === sz) : undefined);
+  const listing = listingFor(size) ?? (p.listings.length === 1 ? p.listings[0] : undefined);
 
   // Desktop: gallery stays pinned while details scroll; images cross-fade with progress.
   useGSAP(
@@ -75,7 +79,7 @@ export function ProductDetail({ product: p }: { product: Product }) {
           <div className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto lg:hidden" aria-label="Product images">
             {p.images.map((src, i) => (
               <div key={src} className="relative aspect-[3/4] w-full shrink-0 snap-center bg-rice sm:w-[70%]">
-                <Image src={src} alt={i === 0 ? `${p.name}` : `${p.name} — view ${i + 1}`} fill priority={i === 0} sizes="(min-width:640px) 70vw, 100vw" className="object-cover" />
+                <Image src={src} alt={i === 0 ? `${p.name}` : `${p.name} — view ${i + 1}`} fill priority={i === 0} sizes="(min-width:640px) 70vw, 100vw" className={fitClass(src)} />
               </div>
             ))}
           </div>
@@ -88,13 +92,13 @@ export function ProductDetail({ product: p }: { product: Product }) {
             <div className="relative h-full overflow-hidden bg-rice">
               {p.images.map((src, i) => (
                 <div key={src} data-frame className="absolute inset-0">
-                  <Image src={src} alt={i === 0 ? p.name : `${p.name} — view ${i + 1}`} fill priority={i === 0} quality={85} sizes="50vw" className="object-cover" />
+                  <Image src={src} alt={i === 0 ? p.name : `${p.name} — view ${i + 1}`} fill priority={i === 0} quality={85} sizes="50vw" className={fitClass(src)} />
                 </div>
               ))}
               {p.images.length > 1 && (
                 <div className="absolute bottom-5 left-5 flex gap-2" aria-hidden>
                   {p.images.map((_, i) => (
-                    <span key={i} className={`h-px w-8 transition-colors duration-500 ${i === active ? "bg-ivory" : "bg-ivory/35"}`} />
+                    <span key={i} className={`h-px w-8 transition-colors duration-500 ${i === active ? "bg-crimson" : "bg-ink/20"}`} />
                   ))}
                 </div>
               )}
@@ -119,7 +123,7 @@ export function ProductDetail({ product: p }: { product: Product }) {
           <p className="mt-4 flex items-baseline gap-3 text-lg">
             <span>{formatAUD(p.price)}</span>
             {p.compareAt && <span className="text-sm text-stone line-through">{formatAUD(p.compareAt)}</span>}
-            <span className="text-xs text-stone">AUD, incl. GST</span>
+            <span className="text-xs text-stone">AUD{p.listings.length > 1 ? " · every size" : ""}</span>
           </p>
           <p className="mt-6 leading-relaxed text-ink/80">{p.short}</p>
 
@@ -156,9 +160,15 @@ export function ProductDetail({ product: p }: { product: Product }) {
               />
             ))
           ) : p.sizes.length > 1 ? (
-            <SizePicker label="Size" options={p.sizes} value={size} onChange={setSize} />
+            <SizePicker label="Size" options={p.sizes} value={size} onChange={(v) => { setSize(v); setError(null); }} />
           ) : (
-            <p className="mt-8 text-sm text-stone">Size: {p.sizes[0]}</p>
+            <p className="mt-8 text-sm text-stone">Size: {p.sizes[0]}{p.listings[0]?.size && p.listings[0].size !== p.sizes[0] ? ` (${p.listings[0].size})` : ""}</p>
+          )}
+          {p.sizeChartKey && (
+            <p className="mt-3 text-xs text-stone">
+              Each size is its own live eBay listing. Need {p.sizes.length > 1 ? "another" : "a different"} size?{" "}
+              <a href={`mailto:${SITE.email}?subject=${encodeURIComponent(`Size request — ${p.name}`)}`} className="link-underline text-crimson">Ask us</a>.
+            </p>
           )}
           {charts.length > 0 && (
             <a
@@ -168,33 +178,56 @@ export function ProductDetail({ product: p }: { product: Product }) {
                 if (d) d.open = true;
               }}
               className="link-underline mt-3 inline-block text-xs text-stone hover:text-ink">
-              Size chart in cm — bust, waist, hip, height
+              Size chart in cm — weight, bust, waist
             </a>
           )}
 
-          {/* Actions */}
-          <div className="mt-8 flex gap-3">
-            <button type="button" onClick={onAdd} className="btn-primary flex-1 py-5">
-              {added ? "Added to bag ✓" : `Add to bag — ${formatAUD(p.price)}`}
-            </button>
-            <button
-              type="button"
-              onClick={() => toggleWish(p.slug)}
-              aria-pressed={wished}
-              aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
-              className={`flex w-16 items-center justify-center border transition-colors ${wished ? "border-crimson text-crimson" : "border-line hover:border-ink"}`}
-            >
-              <HeartIcon filled={wished} />
-            </button>
+          {/* Actions — every size maps to its own eBay listing */}
+          <div className="mt-8 flex flex-col gap-3">
+            {listing ? (
+              <a
+                href={EBAY_STORE.itemUrl(listing.id)}
+                target="_blank"
+                rel="noopener"
+                className="btn-primary group/ebay flex items-center justify-center gap-3 py-5"
+              >
+                <span>Buy {p.sizes.length > 1 ? `size ${size}` : "now"} on eBay — {formatAUD(listing.price)}</span>
+                <span aria-hidden className="transition-transform duration-500 group-hover/ebay:translate-x-1 group-hover/ebay:-translate-y-1">↗</span>
+              </a>
+            ) : (
+              <button type="button" onClick={() => setError("Please choose a size — each size links to its own eBay listing.")} className="btn-primary py-5">
+                Choose a size to buy on eBay
+              </button>
+            )}
+            <div className="flex gap-3">
+              <button type="button" onClick={onAdd} className="btn-outline flex-1 py-4">
+                {added ? "Added to bag ✓" : "Add to bag"}
+              </button>
+              <button
+                type="button"
+                onClick={() => toggleWish(p.slug)}
+                aria-pressed={wished}
+                aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
+                className={`flex w-16 items-center justify-center border transition-colors ${wished ? "border-crimson text-crimson" : "border-line hover:border-ink"}`}
+              >
+                <HeartIcon filled={wished} />
+              </button>
+            </div>
+            {listing && (
+              <p className="flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.22em] text-stone">
+                <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/60" /><span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-600" /></span>
+                Live listing · eBay item {listing.id}
+              </p>
+            )}
           </div>
           <p role="alert" className="mt-3 min-h-5 text-sm text-crimson">
             {error}
           </p>
 
           <ul className="mt-2 space-y-2 border-y border-line py-5 text-sm text-ink/80">
-            <li>Delivered in 3–7 business days, Australia-wide.</li>
-            <li>Free shipping over {formatAUD(SITE.freeShippingThreshold)}. New Zealand coming soon.</li>
-            <li>
+            <li>Ships from Frankston, Victoria — buyer-protected through eBay.</li>
+            <li>Postage and returns follow each eBay listing’s terms.</li>
+            <li className={p.sizeChartKey ? "" : "hidden"}>
               Unsure about fit?{" "}
               <a href={`mailto:${SITE.email}?subject=${encodeURIComponent(`Fit note — ${p.name}`)}`} className="link-underline text-crimson">
                 Email us for a fit note
@@ -212,12 +245,19 @@ export function ProductDetail({ product: p }: { product: Product }) {
 
           {/* Accordions */}
           <div className="mt-10 divide-y divide-line border-y border-line">
-            <Accordion title="What’s included" open>
+            <Accordion title="What’s included & details" open>
               <ul className="list-inside list-disc space-y-1 marker:text-crimson">
                 {p.included.map((x) => (
                   <li key={x}>{x}</li>
                 ))}
               </ul>
+              {p.details && (
+                <ul className="mt-4 space-y-1 text-ink/75">
+                  {p.details.map((x) => (
+                    <li key={x}>— {x}</li>
+                  ))}
+                </ul>
+              )}
             </Accordion>
             <Accordion title="Fabric & occasion">
               <dl className="grid grid-cols-[7rem_1fr] gap-y-3">
@@ -262,9 +302,29 @@ export function ProductDetail({ product: p }: { product: Product }) {
                 </div>
               </Accordion>
             )}
+            <Accordion title={`On eBay · ${p.listings.length} ${p.listings.length === 1 ? "listing" : "listings"}`}>
+              <ul className="divide-y divide-line">
+                {p.listings.map((l) => (
+                  <li key={l.id} className="flex items-center justify-between gap-4 py-3">
+                    <span className="min-w-0">
+                      <span className="block text-[0.6rem] uppercase tracking-[0.22em] text-stone">
+                        Nº {String(l.n).padStart(2, "0")} · {l.size || "One size"} · item {l.id}
+                      </span>
+                      <span className="mt-1 block truncate">{l.title}</span>
+                    </span>
+                    <a href={EBAY_STORE.itemUrl(l.id)} target="_blank" rel="noopener" className="link-underline shrink-0 text-crimson">
+                      {formatAUD(l.price)} ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <TLink href="/ebay" className="link-underline mt-4 inline-block text-xs text-crimson">
+                See all 28 listings →
+              </TLink>
+            </Accordion>
             <Accordion title="Shipping & returns">
               <p>
-                Dispatched from Melbourne within 1–2 business days and delivered in 3–7 business days across Australia. Unworn pieces with tags may be returned within 14 days.{" "}
+                Bought on eBay, each piece ships from Frankston, Victoria under that listing’s postage and returns terms — check the listing before you buy. Orders placed here (coming soon) will follow our own policy.{" "}
                 <TLink href="/shipping-returns" className="link-underline text-crimson">
                   Full details
                 </TLink>

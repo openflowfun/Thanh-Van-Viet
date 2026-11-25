@@ -176,6 +176,27 @@ html.lenis body {
   animation: marquee 38s linear infinite;
 }
 
+/* The drifting photo wall on /ebay — two copies stacked, so -50% loops seamlessly. */
+@keyframes drift-up {
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+@keyframes drift-down {
+  from {
+    transform: translate3d(0, -50%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.animate-drift-up {
+  animation: drift-up 50s linear infinite;
+}
+.animate-drift-down {
+  animation: drift-down 50s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -184,7 +205,9 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .animate-marquee {
+  .animate-marquee,
+  .animate-drift-up,
+  .animate-drift-down {
     animation: none;
   }
 }

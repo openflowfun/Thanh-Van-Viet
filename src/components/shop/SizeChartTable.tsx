@@ -12,7 +12,7 @@ export function SizeChartTable({ chart, compact = false }: { chart: SizeChart; c
               {chart.columns.map((c) => (
                 <th key={c.key} scope="col" className="py-3 pr-4 text-[0.62rem] font-medium uppercase tracking-[0.2em]">
                   {c.label}
-                  {c.key !== "size" && c.key !== "au" && <span className="ml-1 normal-case tracking-normal text-stone">cm</span>}
+                  {c.key !== "size" && c.key !== "au" && <span className="ml-1 normal-case tracking-normal text-stone">{c.key === "weight" ? "kg" : "cm"}</span>}
                 </th>
               ))}
             </tr>

@@ -44,3 +44,7 @@ next-env.d.ts
 /website-html/
 .DS_Store
 *.zip
+
+# one-click push helpers (see "Push to GitHub.command")
+.push-message
+.claude-sync/

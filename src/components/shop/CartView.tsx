@@ -9,6 +9,7 @@ import { CartLineItem, FreeShippingBar } from "./CartLineItem";
 import { ProductCard } from "./ProductCard";
 import { TLink } from "@/components/motion/PageTransition";
 import { LotusDivider } from "@/components/ui/Lotus";
+import { EBAY_STORE } from "@/lib/catalog-data";
 
 const STANDARD_SHIPPING = 9.95;
 
@@ -104,9 +105,30 @@ export function CartView() {
                 </div>
                 <p className="text-right text-xs text-stone">Includes {formatAUD(gst)} GST</p>
               </dl>
+              <div className="mt-8 border-t border-line pt-6">
+                <p className="eyebrow text-crimson">Buy on eBay today</p>
+                <p className="mt-2 text-xs leading-relaxed text-stone">Our own checkout is coming soon. Every piece in your bag is live on eBay — one tap each, buyer-protected.</p>
+                <ul className="mt-4 space-y-2">
+                  {lines.map((l) => {
+                    const p = getProduct(l.slug);
+                    const listing = p?.listings.find((x) => (x.size || "One size") === l.size) ?? (p?.listings.length === 1 ? p.listings[0] : undefined);
+                    if (!p || !listing) return null;
+                    return (
+                      <li key={l.id}>
+                        <a href={EBAY_STORE.itemUrl(listing.id)} target="_blank" rel="noopener" className="group flex items-center justify-between gap-3 border border-line bg-ivory px-4 py-3 text-sm transition-colors hover:border-crimson">
+                          <span className="min-w-0 truncate">
+                            {p.name} <span className="text-stone">· {l.size}</span>
+                          </span>
+                          <span className="shrink-0 text-crimson">{formatAUD(listing.price)} ↗</span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
               <button
                 type="button"
-                className="btn-primary mt-8 w-full py-5"
+                className="btn-outline mt-6 w-full py-4"
                 onClick={() => {
                   const ref = `TVV-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
                   setConfirmed({

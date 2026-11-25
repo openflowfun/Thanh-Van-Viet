@@ -7,6 +7,7 @@ export const PRIMARY_NAV = [
 ];
 
 export const SECONDARY_NAV = [
+  { href: "/ebay", label: "Live on eBay" },
   { href: "/lookbook", label: "Lookbook" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
@@ -20,4 +21,4 @@ export const SERVICE_NAV = [
 ];
 
 /** Routes that open on a full-bleed dark hero (nav starts transparent). */
-export const DARK_HERO_ROUTES = ["/", "/about", "/lookbook"];
+export const DARK_HERO_ROUTES = ["/", "/about", "/lookbook", "/ebay"];

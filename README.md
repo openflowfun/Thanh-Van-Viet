@@ -1,7 +1,7 @@
 # THANH VAN VIET — Vietnamese Fashion & Lifestyle
 
 The storefront for Thanh Van Viet, a Vietnamese fashion and lifestyle house in Melbourne, Australia (New Zealand next).
-It's an editorial e-commerce frontend with cinematic scroll, a typed 36-piece catalogue, and a mock cart and wishlist.
+It's an editorial e-commerce frontend with cinematic scroll, a typed catalogue of the 28 live eBay listings (18 pieces) with their real photos, and a mock cart and wishlist.
 
 **Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · GSAP + ScrollTrigger · Lenis · `@gsap/react`
 
@@ -21,18 +21,26 @@ Node 20+ is recommended.
 ### The HTML version
 
 The site is set up as a **static HTML export** (`output: "export"` in `next.config.ts`).
-`npm run build` writes the whole website to **`out/`** as plain `.html`, `.css` and `.js` files. Every page is pre-rendered, including all 36 product pages. No Node.js server is needed to host it.
+`npm run build` writes the whole website to **`out/`** as plain `.html`, `.css` and `.js` files. Every page is pre-rendered, including all 18 product pages and the eBay edit. No Node.js server is needed to host it.
 
 - **Upload:** copy the *contents* of `out/` to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pages with a custom domain, or cPanel `public_html`).
 - **Preview locally:** `npm run preview`, then open http://localhost:3000.
   Double-clicking `index.html` won't work properly, because pages load their assets from the site root (`/_next/…`) and need to be served over HTTP.
 - `website-html/` in the delivered folder is a ready-built copy of `out/`.
 
-### GitHub Pages preview
+### GitHub Pages preview — one double-click
 
 The live preview is at **https://openflowfun.github.io/Thanh-Van-Viet/**. It's served from the `gh-pages` branch, which contains only the built HTML. `main` holds the source.
 
-To rebuild it:
+**Double-click `Push to GitHub.command`** in the project folder. It:
+
+1. commits everything you've changed and pushes `main`;
+2. builds the site for the `/Thanh-Van-Viet` sub-folder in a cache folder outside iCloud (`~/Library/Caches/thanh-van-viet-build`), so `node_modules` never syncs; if Node 20+ isn't installed it publishes the ready-built `out/` instead;
+3. publishes the build to `gh-pages` (with `.nojekyll`) and opens the preview.
+
+It uses your normal GitHub sign-in (Keychain / GitHub CLI) and falls back to `.git/claude-credentials` if that file exists. First run on a new Mac: if macOS says the file can't be opened, right-click → **Open** once.
+
+By hand:
 
 ```bash
 NEXT_PUBLIC_BASE_PATH=/Thanh-Van-Viet npm run build   # site lives in a sub-folder on Pages
@@ -46,9 +54,10 @@ Then commit the contents of `out/` to the `gh-pages` branch. For a normal domain
 | Route | What it is |
 | --- | --- |
 | `/` | Home: preloader, cinematic hero, occasions marquee, collection tiles, pinned story ribbon, "This season", editorial film strip, mother–daughter feature, values, lookbook strip, newsletter |
-| `/shop` | All 36 products, filterable by category, occasion, colour and price, with sorting. Accepts `?category=` and `?occasion=` |
+| `/shop` | All 18 pieces (28 eBay listings), filterable by category, occasion, colour and price, with sorting. Accepts `?category=` and `?occasion=` |
+| `/ebay` | **Live on eBay** — counter hero over a drifting wall of the real photos, pinned horizontal "plates" (one per piece, each size linking to its listing), and the full ledger of all 28 listings with filters and a cursor photo preview |
 | `/collections/[slug]` | `womens-ao-dai`, `kids-ao-dai`, `family-sets`, `accessories` |
-| `/product/[slug]` | PDP: pinned scrubbed gallery, colour and size (or per-wearer sizes for sets), what's included, fabric/occasion/care, cm size chart with how-to-measure, "pair it with", fabric story, JSON-LD |
+| `/product/[slug]` | PDP: pinned scrubbed gallery, size → **Buy on eBay** for that exact listing, what's included, fabric/occasion/care, cm size chart, the listing(s) on eBay, "pair it with", a cloth story using the product's own photo, JSON-LD with one offer per listing |
 | `/lookbook` | Editorial chapters with photography first and no prices |
 | `/about` | Brand story, pillars, and an "Our family" block ready for a personal story |
 | `/contact` | Form (opens the visitor's email app, addressed to thanhvanviet.au@gmail.com), email, hours |
@@ -77,9 +86,10 @@ To update a logo, replace the file and keep the same name and aspect ratio. The 
 
 ## Content & data
 
-- **Products:** `src/lib/products.ts`. Types, 36 products, categories, occasions, price bands and the "This season" edit.
-- **Size charts:** `src/lib/size-charts.ts`, in cm.
-- **Photography:** `src/lib/images.ts`. Every image on the site is referenced through this one map. These are **Unsplash placeholders**, so replace them with your own shoots. Kids' products especially need real photography: several currently use mood images.
+- **Products:** `src/lib/products.ts` — the 18 real pieces behind the 28 live eBay listings (seller `thanhvanviet.au04`, scanned 25 Nov 2026): names, copy, colours, occasions, and the "This season" edit. Kids' and family collections show an "Arriving soon" panel until they have pieces.
+- **eBay data & photos:** `src/lib/catalog-data.ts` holds each listing's item number, size, price and exact title, plus image dimensions. The listings' own photos are in `public/products/<slug>/` (`NN.webp` 1600px and `NN-sm.webp` 720px — the image loader picks the small file for small slots). Size charts and logo cards are kept but moved to the end of each gallery.
+- **Size charts:** `src/lib/size-charts.ts`, in cm. The women's chart is Thanh Van Viet's own (weight, bust, waist; Vietnamese sizing that runs small).
+- **Editorial photography:** `src/lib/images.ts` — hero, lookbook and mood images are still **Unsplash placeholders**; all product imagery is real.
 - **Site constants:** `src/lib/format.ts`. Email, free-shipping threshold, shipping note, site URL (`https://thanhvanviet.com.au`, a placeholder; update it when the domain is live).
 - **Policies to confirm:** the shipping prices (A$9.95 standard, A$14.95 express, free over A$150) and returns terms (14 days, unworn with tags, earrings final sale) are sensible drafts. Confirm them before launch.
 

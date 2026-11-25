@@ -6,7 +6,7 @@ import { SITE } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Size Guide",
-  description: "Áo dài size charts in centimetres — bust, waist, hip and height — for women, girls and boys. Vietnamese cuts run slimmer than Australian sizes.",
+  description: "Áo dài size charts in centimetres — weight, bust and waist for women; bust, waist, hip and height for children. Vietnamese sizing runs smaller than Australian sizes.",
   alternates: { canonical: "/size-guide" },
 };
 

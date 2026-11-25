@@ -2,6 +2,7 @@ export type SizeChartKey = "women" | "girls" | "boys" | "family" | "slippers";
 
 export type SizeRow = {
   size: string;
+  weight?: string;
   au?: string;
   bust?: string;
   waist?: string;
@@ -31,15 +32,21 @@ export const SIZE_CHARTS: Record<SizeChart["key"], SizeChart> = {
     key: "women",
     title: "Women’s áo dài",
     note:
-      "Vietnamese áo dài are cut close through the bust and waist. If you sit between two sizes, choose the larger and we can advise on a tailor’s take-in.",
-    columns: [...bodyCols, { key: "au", label: "Approx. AU" }],
+      "From the Thanh Van Viet size chart. These áo dài are made to Vietnamese sizing and run smaller than Australian sizes — please check bust and waist in cm before ordering. Between sizes? Choose the larger, or email us.",
+    columns: [
+      { key: "size", label: "Size" },
+      { key: "weight", label: "Weight" },
+      { key: "bust", label: "Bust" },
+      { key: "waist", label: "Waist" },
+    ],
     rows: [
-      { size: "S", bust: "80–82", waist: "62–64", hip: "86–88", height: "150–158", au: "6–8" },
-      { size: "M", bust: "84–86", waist: "66–68", hip: "90–92", height: "155–162", au: "8–10" },
-      { size: "L", bust: "88–90", waist: "70–72", hip: "94–96", height: "158–165", au: "10–12" },
-      { size: "XL", bust: "92–94", waist: "74–76", hip: "98–100", height: "160–168", au: "12–14" },
-      { size: "2XL", bust: "96–98", waist: "78–80", hip: "102–104", height: "160–170", au: "14–16" },
-      { size: "3XL", bust: "100–104", waist: "82–86", hip: "106–110", height: "160–172", au: "16–18" },
+      { size: "S", weight: "40–46", bust: "82–84", waist: "66–68" },
+      { size: "M", weight: "47–52", bust: "86–88", waist: "70–72" },
+      { size: "L", weight: "53–58", bust: "90–92", waist: "72–76" },
+      { size: "XL", weight: "59–62", bust: "94–96", waist: "78–80" },
+      { size: "XXL", weight: "63–67", bust: "98–100", waist: "82–84" },
+      { size: "3XL", weight: "68–72", bust: "100–104", waist: "86–88" },
+      { size: "4XL", weight: "72–76", bust: "106–108", waist: "90–92" },
     ],
   },
   girls: {

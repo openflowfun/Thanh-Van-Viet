@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { TLink } from "@/components/motion/PageTransition";
-import { getProduct } from "@/lib/products";
+import { getProduct, photosOf } from "@/lib/products";
+import { fitClass } from "@/lib/media";
 import { formatAUD } from "@/lib/format";
 import { useStore, type CartLine } from "@/lib/store";
 
@@ -13,7 +14,7 @@ export function CartLineItem({ line, large = false, onNavigate }: { line: CartLi
   return (
     <li className={`flex gap-4 ${large ? "py-8 sm:gap-8" : "py-5"}`}>
       <TLink href={`/product/${p.slug}`} onClick={onNavigate} className={`relative shrink-0 overflow-hidden bg-rice ${large ? "h-40 w-28 sm:h-52 sm:w-40" : "h-28 w-20"}`}>
-        <Image src={p.images[0]} alt={p.name} fill sizes={large ? "160px" : "80px"} className="object-cover" />
+        <Image src={photosOf(p)[0] ?? p.images[0]} alt={p.name} fill sizes={large ? "160px" : "80px"} className={fitClass(photosOf(p)[0] ?? p.images[0])} />
       </TLink>
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-start justify-between gap-3">

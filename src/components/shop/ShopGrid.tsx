@@ -5,13 +5,12 @@ import { ProductCard } from "./ProductCard";
 import { CATEGORIES, OCCASIONS, PRICE_BANDS, type Category, type Occasion, type Product } from "@/lib/products";
 
 const COLOUR_FAMILIES: { key: string; label: string; hex: string; match: string[] }[] = [
-  { key: "red", label: "Red", hex: "#B91C1C", match: ["Lacquer Crimson", "Tết Red", "Coral"] },
-  { key: "ivory", label: "Ivory & white", hex: "#F3EDE3", match: ["Rice Ivory", "Lotus White", "Cream", "Pearl"] },
-  { key: "pink", label: "Pink", hex: "#D98AA0", match: ["Lotus Blush", "Orchid Pink"] },
-  { key: "saffron", label: "Saffron & gold", hex: "#D9692B", match: ["Saffron", "Soft Gold"] },
-  { key: "green", label: "Jade", hex: "#7C8F5A", match: ["Jade"] },
-  { key: "blue", label: "Blue", hex: "#AFC3CF", match: ["Hạ Long Mist", "Indigo"] },
-  { key: "purple", label: "Purple", hex: "#6E3A73", match: ["Huế Purple", "Plum"] },
+  { key: "ivory", label: "Ivory & cream", hex: "#F3EDE3", match: ["Rice Ivory", "Cream", "Pastel Metallic"] },
+  { key: "pink", label: "Pink & peach", hex: "#EDB2BF", match: ["Peach Blush", "Blossom Pink", "Blush Pearl"] },
+  { key: "gold", label: "Gold", hex: "#E4C98C", match: ["Champagne Gold", "Butter Yellow"] },
+  { key: "green", label: "Mint & teal", hex: "#BFE2D5", match: ["Mint", "Lake Teal"] },
+  { key: "blue", label: "Blue", hex: "#B7C4D2", match: ["Silver Blue", "Ice Blue", "Sky Blue", "Denim Blue", "Indigo Navy"] },
+  { key: "red", label: "Red & terracotta", hex: "#B5452F", match: ["Lacquer Crimson", "Terracotta"] },
   { key: "black", label: "Black", hex: "#141212", match: ["Ink Black"] },
 ];
 
@@ -25,9 +24,11 @@ type Props = {
   lockCategory?: boolean;
   /** Read ?category= and ?occasion= from the URL in the browser (static-export friendly). */
   readQuery?: boolean;
+  /** Shown instead of the grid when the collection itself has no pieces yet. */
+  comingSoon?: React.ReactNode;
 };
 
-export function ShopGrid({ products, initialCategory = null, initialOccasion = null, lockCategory = false, readQuery = false }: Props) {
+export function ShopGrid({ products, initialCategory = null, initialOccasion = null, lockCategory = false, readQuery = false, comingSoon }: Props) {
   const [category, setCategory] = useState<Category | null>(initialCategory);
   const [occasions, setOccasions] = useState<Occasion[]>(initialOccasion ? [initialOccasion] : []);
   const [colours, setColours] = useState<string[]>([]);
@@ -88,7 +89,7 @@ export function ShopGrid({ products, initialCategory = null, initialOccasion = n
           <Chip active={category === null} onClick={() => setCategory(null)}>
             All
           </Chip>
-          {CATEGORIES.map((c) => (
+          {CATEGORIES.filter((c) => products.some((p) => p.category === c.key)).map((c) => (
             <Chip key={c.key} active={category === c.key} onClick={() => setCategory(category === c.key ? null : c.key)}>
               {c.label}
             </Chip>
@@ -111,7 +112,7 @@ export function ShopGrid({ products, initialCategory = null, initialOccasion = n
         ))}
       </FilterGroup>
       <FilterGroup title="Price">
-        {PRICE_BANDS.map((b) => (
+        {PRICE_BANDS.filter((b) => products.some((p) => p.price >= b.min && p.price < b.max)).map((b) => (
           <Chip key={b.key} active={price === b.key} onClick={() => setPrice(price === b.key ? null : b.key)}>
             {b.label}
           </Chip>
@@ -125,6 +126,10 @@ export function ShopGrid({ products, initialCategory = null, initialOccasion = n
     </div>
   );
 
+  if (comingSoon && products.length === 0) {
+    return <div className="container-x pb-28 pt-16 lg:pt-24">{comingSoon}</div>;
+  }
+
   return (
     <div className="container-x pb-28 pt-12 lg:pt-16">
       {/* Toolbar */}
@@ -133,7 +138,7 @@ export function ShopGrid({ products, initialCategory = null, initialOccasion = n
           Filter {activeCount > 0 && <span className="text-crimson">({activeCount})</span>}
         </button>
         <p className="hidden text-xs text-stone lg:block" aria-live="polite">
-          {results.length} {results.length === 1 ? "piece" : "pieces"}
+          {results.length} {results.length === 1 ? "piece" : "pieces"} · {results.reduce((n, p) => n + p.listings.length, 0)} live eBay listings
         </p>
         <label className="flex items-center gap-3 text-xs">
           <span className="eyebrow hidden text-stone sm:inline">Sort</span>

@@ -6,6 +6,8 @@ import { FabricStory } from "@/components/pdp/FabricStory";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { SectionHead } from "@/components/home/Sections";
 import { SITE } from "@/lib/format";
+import { absoluteImage } from "@/lib/media";
+import { EBAY_STORE } from "@/lib/catalog-data";
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
@@ -18,12 +20,12 @@ export async function generateMetadata({ params }: PageProps<"/product/[slug]">)
   if (!p) return {};
   return {
     title: p.name,
-    description: `${p.short} ${p.fabric}. A$${p.price} — delivered across Australia in 3–7 business days.`,
+    description: `${p.short} ${p.fabric}. A$${p.price.toFixed(2)} — sizes ${p.sizes.join(", ")}, live on eBay.`,
     alternates: { canonical: `/product/${p.slug}` },
     openGraph: {
       title: `${p.name} · ${SITE.wordmark}`,
       description: p.short,
-      images: [{ url: `${p.images[0]}?w=1200&h=630&fit=crop&q=70`, width: 1200, height: 630, alt: p.name }],
+      images: [{ url: absoluteImage(p.images[0]), alt: p.name }],
     },
   };
 }
@@ -41,17 +43,19 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
     "@type": "Product",
     name: p.name,
     description: p.description.join(" "),
-    image: p.images.map((i) => `${i}?w=1200&q=75`),
+    image: p.images.map(absoluteImage),
     brand: { "@type": "Brand", name: SITE.wordmark },
     material: p.fabric,
     color: p.colours.map((c) => c.name).join(", "),
-    offers: {
+    offers: p.listings.map((l) => ({
       "@type": "Offer",
       priceCurrency: "AUD",
-      price: p.price.toFixed(2),
+      price: l.price.toFixed(2),
       availability: "https://schema.org/InStock",
-      url: `${SITE.url}/product/${p.slug}`,
-    },
+      itemCondition: "https://schema.org/NewCondition",
+      url: EBAY_STORE.itemUrl(l.id),
+      ...(l.size ? { size: l.size } : {}),
+    })),
   };
 
   return (

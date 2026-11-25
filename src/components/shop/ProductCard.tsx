@@ -4,7 +4,8 @@ import Image from "next/image";
 import { TLink } from "@/components/motion/PageTransition";
 import { useStore } from "@/lib/store";
 import { formatAUD } from "@/lib/format";
-import type { Product } from "@/lib/products";
+import { photosOf, type Product } from "@/lib/products";
+import { fitClass } from "@/lib/media";
 
 export function HeartIcon({ filled }: { filled: boolean }) {
   return (
@@ -23,26 +24,29 @@ export function ProductCard({ product: p, priority = false, sizes = "(min-width:
   const { add, wishlist, toggleWish } = useStore();
   const wished = wishlist.includes(p.slug);
   const quickSizes = p.sizeGroups ? null : p.sizes;
+  const photos = photosOf(p);
+  const front = photos[0] ?? p.images[0];
+  const back = photos[1];
 
   return (
     <article className="group relative">
       <div className="relative aspect-[3/4] overflow-hidden bg-rice">
         <TLink href={`/product/${p.slug}`} className="absolute inset-0" aria-label={p.name}>
           <Image
-            src={p.images[0]}
+            src={front}
             alt={`${p.name} — ${p.colours[0].name}`}
             fill
             sizes={sizes}
             priority={priority}
-            className="object-cover transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.04]"
+            className={`${fitClass(front)} transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.04]`}
           />
-          {p.images[1] && (
+          {back && (
             <Image
-              src={p.images[1]}
+              src={back}
               alt=""
               fill
               sizes={sizes}
-              className="object-cover opacity-0 transition-opacity duration-700 [@media(pointer:fine)]:group-hover:opacity-100"
+              className={`${fitClass(back)} opacity-0 transition-opacity duration-700 [@media(pointer:fine)]:group-hover:opacity-100`}
             />
           )}
         </TLink>
@@ -66,7 +70,7 @@ export function ProductCard({ product: p, priority = false, sizes = "(min-width:
         <div className="absolute inset-x-0 bottom-0 hidden translate-y-full bg-ivory/95 px-3 py-3 backdrop-blur transition-transform duration-500 ease-[var(--ease-silk)] group-focus-within:translate-y-0 group-hover:translate-y-0 [@media(pointer:fine)]:block">
           {quickSizes ? (
             <div className="flex items-center gap-2">
-              <span className="mr-1 text-[0.6rem] uppercase tracking-[0.2em] text-stone">Quick add</span>
+              <span className="mr-1 text-[0.6rem] uppercase tracking-[0.2em] text-stone">{quickSizes.length === 1 ? "Add" : "Quick add"}</span>
               <div className="flex flex-wrap gap-1">
                 {quickSizes.map((s) => (
                   <button
@@ -105,6 +109,9 @@ export function ProductCard({ product: p, priority = false, sizes = "(min-width:
         <p className="shrink-0 text-sm transition-opacity duration-500 [@media(pointer:fine)]:opacity-60 [@media(pointer:fine)]:group-hover:opacity-100">
           {p.compareAt && <span className="mr-2 text-stone line-through">{formatAUD(p.compareAt)}</span>}
           {formatAUD(p.price)}
+          <span className="mt-1 block text-[0.58rem] uppercase tracking-[0.2em] text-stone sm:text-right">
+            {p.listings.length > 1 ? `${p.sizes.join(" · ")} on eBay` : p.sizes[0] === "One size" ? "Live on eBay" : `${p.sizes[0]} on eBay`}
+          </span>
         </p>
       </div>
     </article>
